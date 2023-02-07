@@ -6,18 +6,24 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.IntSummaryStatistics;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 
 public class Aplicacao {
 
     public static void main(String[] args) throws IOException {
 
+        Scanner scan = new Scanner(System.in);
+
         // obter caminho do arquivo
         Path file = Path.of("campeonato-brasileiro.csv");
 
+        System.out.println("Bem vindo ao histórico dos jogos do Campeonato Brasileiro de Futebol!");
+        System.out.println("Digite o ano que você deseja obter os dados: ");
+
         // obter a implementação: (ponto extra - abstrair para interface)
         CampeonatoBrasileiroImpl resultados =
-                new CampeonatoBrasileiroImpl(file, (jogo) -> jogo.data().data().getYear() == 2019);
+                new CampeonatoBrasileiroImpl( (jogo) -> jogo.data().data().getYear() == 2019);
 
         // imprimir estatisticas
         imprimirEstatisticas(resultados);
