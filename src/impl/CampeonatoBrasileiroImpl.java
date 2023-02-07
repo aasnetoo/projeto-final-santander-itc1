@@ -165,33 +165,33 @@ public class CampeonatoBrasileiroImpl {
         List<Jogo> jogosDoAno = brasileirao;
         String placar = "";
         for (Jogo jogo: jogosDoAno) {
-            if (jogo.mandantePlacar()<jogo.visitantePlacar()){
-                placar = jogo.visitantePlacar()+"-"+jogo.mandantePlacar();
-            }else{
+//            if (jogo.mandantePlacar()<jogo.visitantePlacar()){
+//                placar = jogo.visitantePlacar()+"-"+jogo.mandantePlacar();
+//            }else{
                 placar = jogo.mandantePlacar()+"-"+jogo.visitantePlacar();
-            }
+            //}
             placares.add(placar);
         }
         return placares;
     }
 
-    public List<String> getPlacarMaisRepetido() {
-        var placares = getTodosOsPlacares();
-//        var placarMaisRepetido = placares.stream()
-//                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
-//                .entrySet().stream()
-//                .sorted(Map.Entry.<Integer, Long>comparingByValue()
-//                        .reversed())
-//                .limit(1)
-//                .forEachOrdered(e -> System.out.println("Nº " + e.getKey() + " apareceu " + e.getValue()));
-        // arrumar esse método amanhã
+    public Map.Entry<String,Long> getPlacarMaisRepetido() {
+        List<String> placares = getTodosOsPlacares();
+        Optional<Map.Entry<String,Long>> optionPlacarMaisRepetido = placares.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting())).entrySet().stream().max(Map.Entry.comparingByValue());
+        Map.Entry<String,Long> placarMaisRepetido = optionPlacarMaisRepetido.get();
 
-        return null;
+
+        return placarMaisRepetido;
 
     }
 
-    public Map.Entry<Resultado, Long> getPlacarMenosRepetido() {
-        return null;
+    public Map.Entry<String, Long> getPlacarMenosRepetido() {
+        List<String> placares = getTodosOsPlacares();
+        Optional<Map.Entry<String,Long>> optionPlacarMaisRepetido = placares.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting())).entrySet().stream().min(Map.Entry.comparingByValue());
+        Map.Entry<String,Long> placarMenosRepetido = optionPlacarMaisRepetido.get();
+
+
+        return placarMenosRepetido;
     }
 
     private List<Time> getTodosOsTimes() {

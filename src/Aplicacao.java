@@ -4,10 +4,7 @@ import impl.CampeonatoBrasileiroImpl;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.IntSummaryStatistics;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 public class Aplicacao {
 
@@ -40,12 +37,12 @@ public class Aplicacao {
         System.out.println("Estatisticas (Total de jogos) - " + statistics.getCount());
         System.out.println("Estatisticas (Media de gols) - " + statistics.getAverage());
 
-        Map.Entry<Resultado, Long> placarMaisRepetido = brasileirao.getPlacarMaisRepetido();
+        Map.Entry<String,Long> placarMaisRepetido = brasileirao.getPlacarMaisRepetido();
 
         System.out.println("Estatisticas (Placar mais repetido) - "
                 + placarMaisRepetido.getKey() + " (" +placarMaisRepetido.getValue() + " jogo(s))");
 
-        Map.Entry<Resultado, Long> placarMenosRepetido = brasileirao.getPlacarMenosRepetido();
+        Map.Entry<String, Long> placarMenosRepetido = brasileirao.getPlacarMenosRepetido();
 
         System.out.println("Estatisticas (Placar menos repetido) - "
                 + placarMenosRepetido.getKey() + " (" +placarMenosRepetido.getValue() + " jogo(s))");
