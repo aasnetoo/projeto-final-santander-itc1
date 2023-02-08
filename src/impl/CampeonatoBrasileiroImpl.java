@@ -100,8 +100,14 @@ public class CampeonatoBrasileiroImpl {
         return null;
     }
 
-    public Map<Jogo, Integer> getMediaGolsPorJogo() {
-        return null;
+    public double getMediaGolsPorJogo() {
+        double totalGols = 0L;
+        var jogosDoAno = brasileirao;
+        for (Jogo jogo: jogosDoAno) {
+            double golsDoJogo = jogo.mandantePlacar()+jogo.visitantePlacar();
+            totalGols = golsDoJogo + totalGols;
+        }
+        return (totalGols/jogosDoAno.size());
     }
 
     public IntSummaryStatistics GetEstatisticasPorJogo() {
@@ -113,51 +119,24 @@ public class CampeonatoBrasileiroImpl {
     }
 
     public Long getTotalVitoriasEmCasa(){
-        Long vitorias = 0L;
-
-        List<Jogo> jogosDoAno = brasileirao;
-        for (Jogo jogo: jogosDoAno) {
-            if (jogo.mandante().equals(jogo.vencedor())){
-                vitorias++;
-            }
-        }
-        return vitorias;
+        return brasileirao.stream().filter(jogo-> jogo.mandante().equals(jogo.vencedor())).count();
     }
 
     public Long getTotalVitoriasForaDeCasa() {
-        Long vitorias = 0L;
-
-        List<Jogo> jogosDoAno = brasileirao;
-        for (Jogo jogo: jogosDoAno) {
-            if (jogo.visitante().equals(jogo.vencedor())){
-                vitorias++;
-            }
-        }
-        return vitorias;
+        return brasileirao.stream().filter(jogo -> jogo.visitante().equals(jogo.vencedor())).count();
     }
 
     public Long getTotalEmpates() {
-        Long empates = 0L;
-
-        List<Jogo> jogosDoAno = brasileirao;
-        for (Jogo jogo: jogosDoAno) {
-            if (jogo.vencedor().toString().equals("-")){
-                empates++;
-            }
-        }
-        return empates;
+        return brasileirao.stream().filter(jogo -> jogo.vencedor().toString().equals("-")).count();
     }
 
     public Long getTotalJogosComMenosDe3Gols() {
-        int totalGolsMenorQue3 = 3;
-        var jogosComGolsMenosQue3 = brasileirao.stream().filter(jogo -> jogo.mandantePlacar()+jogo.visitantePlacar() < totalGolsMenorQue3);
-        return jogosComGolsMenosQue3.count();
+        return brasileirao.stream().filter(
+                jogo -> jogo.mandantePlacar()+jogo.visitantePlacar() < Constantes.TOTAL_GOLS_IGUAL_A_TRES).count();
     }
 
     public Long getTotalJogosCom3OuMaisGols() {
-        int totalGolsTresOuMais = 3;
-        var jogosComGolsTresOuMais = brasileirao.stream().filter(jogo -> jogo.mandantePlacar()+jogo.visitantePlacar() >= totalGolsTresOuMais);
-        return jogosComGolsTresOuMais.count();
+        return brasileirao.stream().filter(jogo -> jogo.mandantePlacar()+jogo.visitantePlacar() >= Constantes.TOTAL_GOLS_IGUAL_A_TRES).count();
     }
 
     public List<String> getTodosOsPlacares() {
@@ -165,11 +144,7 @@ public class CampeonatoBrasileiroImpl {
         List<Jogo> jogosDoAno = brasileirao;
         String placar = "";
         for (Jogo jogo: jogosDoAno) {
-//            if (jogo.mandantePlacar()<jogo.visitantePlacar()){
-//                placar = jogo.visitantePlacar()+"-"+jogo.mandantePlacar();
-//            }else{
-                placar = jogo.mandantePlacar()+"-"+jogo.visitantePlacar();
-            //}
+            placar = jogo.mandantePlacar()+"-"+jogo.visitantePlacar();
             placares.add(placar);
         }
         return placares;
@@ -179,8 +154,6 @@ public class CampeonatoBrasileiroImpl {
         List<String> placares = getTodosOsPlacares();
         Optional<Map.Entry<String,Long>> optionPlacarMaisRepetido = placares.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting())).entrySet().stream().max(Map.Entry.comparingByValue());
         Map.Entry<String,Long> placarMaisRepetido = optionPlacarMaisRepetido.get();
-
-
         return placarMaisRepetido;
 
     }
