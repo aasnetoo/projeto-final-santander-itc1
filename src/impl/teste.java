@@ -1,7 +1,12 @@
 package impl;
 
+import dominio.PosicaoTabela;
+
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class teste {
     public static void main(String[] args) throws IOException {
@@ -23,9 +28,25 @@ public class teste {
         System.out.println("time: " +campeonatoBrasileiro.timeComMaisGolsNoCampeonato().getKey());
         System.out.println("gols : " +campeonatoBrasileiro.timeComMaisGolsNoCampeonato().getValue());
         System.out.println(campeonatoBrasileiro.getTabela());
+        imprimirTabela(campeonatoBrasileiro.getTabela());
 
 
 
 
+
+
+    }
+
+    public static void imprimirTabela(List<PosicaoTabela> posicoes) {
+        System.out.println();
+        System.out.println("## TABELA CAMPEONADO BRASILEIRO: ##");
+        int colocacao = 1;
+        for (PosicaoTabela posicao : posicoes) {
+            System.out.println(colocacao +". " + posicao);
+            colocacao++;
+        }
+
+        System.out.println();
+        System.out.println();
     }
 }

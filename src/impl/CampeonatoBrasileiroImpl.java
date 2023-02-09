@@ -3,6 +3,7 @@ package impl;
 import dominio.*;
 
 
+import java.awt.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,6 +16,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.*;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -228,17 +230,12 @@ public class CampeonatoBrasileiroImpl {
     }
 
     public Map.Entry<Time,Long> timeComMaisGolsNoCampeonato(){
-       var a = golsFeitosPorTime().entrySet().stream()
-               .sorted(Collections.reverseOrder(Map.Entry.comparingByValue())).collect(Collectors.toMap(Map.Entry::getKey,Map.Entry::getValue,(oldValue,newValue) -> oldValue,LinkedHashMap::new));
-
-
 
        return  golsFeitosPorTime().entrySet().stream().max((Map.Entry.comparingByValue())).get();
-
     }
 
-    public Map<Time, Map<Boolean, List<Jogo>>> getJogosParticionadosPorMandanteTrueVisitanteFalse() {
-        return null;
+    public Map.Entry<Time, Long> timeComMenosGolsNoCampeonato(){
+        return golsFeitosPorTime().entrySet().stream().min(Map.Entry.comparingByValue()).get();
     }
 
     public List<PosicaoTabela> posicaoTime(){
@@ -246,61 +243,26 @@ public class CampeonatoBrasileiroImpl {
         for (Map.Entry<Time,List<Jogo>> mapa : getTodosOsJogosPorTime().entrySet()){
             Time time = mapa.getKey(); // OK
             long vitoriasTime = mapa.getValue().stream()
-                    .filter(jogo -> jogo.mandante().equals(jogo.vencedor()) || jogo.visitante().equals(jogo.vencedor())).count(); // falta arrumar
+                    .filter(jogo -> time.equals(jogo.vencedor())).count(); // OK
             long empatesTime = mapa.getValue().stream().
-                    filter(jogo -> jogo.mandante().toString().equals("-") || jogo.visitante().toString().equals("-")).count(); // OK
+                    filter(jogo -> jogo.vencedor().toString().equals("-")).count(); // OK
             long derrotasTime =  mapa.getValue().size() - vitoriasTime - empatesTime;
             long golsPositivos = golsFeitosPorTime().get(time); // OK
-            long golsSofridos = golsSofridosPorTime().get(time); // Errado
+            long golsSofridos = golsSofridosPorTime().get(time); // OK
             long saldoDeGols = golsPositivos - golsSofridos; // OK
             long totalDeJogos = mapa.getValue().size(); // OK
-            PosicaoTabela posicaoTabela = new PosicaoTabela(time,vitoriasTime,empatesTime,derrotasTime,golsPositivos,golsSofridos,saldoDeGols,totalDeJogos);
+            long pontuacaoTime = (3*vitoriasTime + empatesTime);
+            PosicaoTabela posicaoTabela = new PosicaoTabela(time, pontuacaoTime, vitoriasTime,derrotasTime,empatesTime,golsPositivos,golsSofridos,saldoDeGols,totalDeJogos);
             tabelaTimes.add(posicaoTabela);
 
         }
         return tabelaTimes;
 
     }
-    public List<String> getTabela() {
-        List<String> timeEstatistica = new ArrayList<>();
-        for (int i = 0; i < posicaoTime().size(); i++) {
-            var a = posicaoTime().get(i).toString();
-            timeEstatistica.add(a);
-
-        }
-
-        var b = timeEstatistica.stream().sorted(Comparator.reverseOrder()).toList();
-        return b;
-            
-        }
-
-
-
-//    public record PosicaoTabela(Time time,
-//                                Long vitorias,
-//                                Long derrotas,
-//                                Long empates,
-//                                Long golsPositivos,
-//                                Long golsSofridos,
-//                                Long saldoDeGols,
-//                                Long jogos)
-
-
-    private DayOfWeek getDayOfWeek(String dia) {
-        return null;
+    public List<PosicaoTabela> getTabela() {
+        return posicaoTime().stream().sorted().toList();
     }
 
-    private Map<Integer, Integer> getTotalGolsPorRodada() {
-        return null;
-    }
-
-    private Map<Time, Integer> getTotalDeGolsPorTime() {
-        return null;
-    }
-
-    private Map<Integer, Double> getMediaDeGolsPorRodada() {
-        return null;
-    }
 
 
 }

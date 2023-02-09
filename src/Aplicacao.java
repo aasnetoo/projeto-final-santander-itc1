@@ -12,21 +12,21 @@ public class Aplicacao {
 
         Scanner scan = new Scanner(System.in);
 
-        // obter caminho do arquivo
-        Path file = Path.of("campeonato-brasileiro.csv");
-
-        System.out.println("Bem vindo ao histórico dos jogos do Campeonato Brasileiro de Futebol!");
-        System.out.println("Digite o ano que você deseja obter os dados: ");
+//        // obter caminho do arquivo
+//        Path file = Path.of("campeonato-brasileiro.csv");
+//
+//        System.out.println("Bem vindo ao histórico dos jogos do Campeonato Brasileiro de Futebol!");
+////        System.out.println("Digite o ano que você deseja obter os dados: ");
 
         // obter a implementação: (ponto extra - abstrair para interface)
         CampeonatoBrasileiroImpl resultados =
-                new CampeonatoBrasileiroImpl( (jogo) -> jogo.data().data().getYear() == 2019);
+                new CampeonatoBrasileiroImpl( (jogo) -> jogo.data().data().getYear() == 2018);
 
         // imprimir estatisticas
         imprimirEstatisticas(resultados);
 
         // imprimir tabela ordenada
-//        imprimirTabela(resultados.getTabela());
+        imprimirTabela(resultados.getTabela());
 
     }
 
@@ -35,7 +35,11 @@ public class Aplicacao {
 
         System.out.println("Estatisticas (Total de gols) - " + statistics.getSum());
         System.out.println("Estatisticas (Total de jogos) - " + statistics.getCount());
-        System.out.println("Estatisticas (Media de gols) - " + statistics.getAverage());
+        System.out.printf("Estatisticas (Media de gols) -  %.2f %n", statistics.getAverage());
+        System.out.println("Estatisticas (Melhor Ataque) - "
+                + brasileirao.timeComMaisGolsNoCampeonato().getKey() + " - " + brasileirao.timeComMaisGolsNoCampeonato().getValue()+ " gols");
+        System.out.println("Estatisticas (Pior Ataque) - "
+                + brasileirao.timeComMenosGolsNoCampeonato().getKey() + " - " + brasileirao.timeComMenosGolsNoCampeonato().getValue()+ " gols");
 
         Map.Entry<String,Long> placarMaisRepetido = brasileirao.getPlacarMaisRepetido();
 
@@ -62,7 +66,7 @@ public class Aplicacao {
         System.out.println("Estatisticas (Empates) - " + empates);
     }
 
-    public static void imprimirTabela(Set<PosicaoTabela> posicoes) {
+    public static void imprimirTabela(List<PosicaoTabela> posicoes) {
         System.out.println();
         System.out.println("## TABELA CAMPEONADO BRASILEIRO: ##");
         int colocacao = 1;
