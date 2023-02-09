@@ -1,10 +1,11 @@
 package impl;
 
 import java.io.IOException;
+import java.util.Map;
 
 public class teste {
     public static void main(String[] args) throws IOException {
-        CampeonatoBrasileiroImpl campeonatoBrasileiro = new CampeonatoBrasileiroImpl( (jogo) -> jogo.data().data().getYear() == 2018);
+        CampeonatoBrasileiroImpl campeonatoBrasileiro = new CampeonatoBrasileiroImpl( (jogo) -> jogo.data().data().getYear() == 2018 );
 
         System.out.println("Total vitorias do mandante: "+campeonatoBrasileiro.getTotalVitoriasEmCasa());
         System.out.println("Total vitorias do visitante: "+campeonatoBrasileiro.getTotalVitoriasForaDeCasa());
@@ -16,6 +17,14 @@ public class teste {
         System.out.println("Estatisticas (Placar menos repetido) - "
                 + campeonatoBrasileiro.getPlacarMenosRepetido().getKey() + " (" +campeonatoBrasileiro.getPlacarMenosRepetido().getValue() + " jogo(s))");
         System.out.printf("Media de gols por ano: %.2f %n", campeonatoBrasileiro.getMediaGolsPorJogo());
+        System.out.println("Estatisticas (Total de gols) - " + campeonatoBrasileiro.getEstatisticasPorJogo().getSum());
+        System.out.println("Estatisticas (Total de jogos) - " + campeonatoBrasileiro.getEstatisticasPorJogo().getCount());
+        System.out.println("Estatisticas (Media de gols) - " + campeonatoBrasileiro.getEstatisticasPorJogo().getAverage());
+        System.out.println("time: " +campeonatoBrasileiro.timeComMaisGolsNoCampeonato().getKey());
+        System.out.println("gols : " +campeonatoBrasileiro.timeComMaisGolsNoCampeonato().getValue());
+        System.out.println(campeonatoBrasileiro.getTabela());
+
+
 
 
     }

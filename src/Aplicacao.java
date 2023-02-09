@@ -26,7 +26,7 @@ public class Aplicacao {
         imprimirEstatisticas(resultados);
 
         // imprimir tabela ordenada
-        imprimirTabela(resultados.getTabela());
+//        imprimirTabela(resultados.getTabela());
 
     }
 

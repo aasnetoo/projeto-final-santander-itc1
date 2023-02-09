@@ -12,7 +12,7 @@ public record PosicaoTabela(Time time,
     @Override
     public String toString() {
         return  time +
-                ", pontos=" + null + // desenvolver forma de obter a pontuação
+                ", pontos=" + getPontuacao() + // desenvolver forma de obter a pontuação
                 ", vitorias=" + vitorias +
                 ", derrotas=" + derrotas +
                 ", empates=" + empates +
@@ -22,4 +22,10 @@ public record PosicaoTabela(Time time,
                 ", jogos=" + jogos +
                 '}';
     }
+
+    public Long getPontuacao(){
+
+        return ((3*vitorias) + empates);
+    }
+
 }
