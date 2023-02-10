@@ -1,32 +1,28 @@
 import dominio.PosicaoTabela;
-import dominio.Resultado;
 import impl.CampeonatoBrasileiroImpl;
-
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.*;
 
 public class Aplicacao {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args){
 
         Scanner scan = new Scanner(System.in);
+        System.out.println("Bem vindo ao histórico dos jogos do Campeonato Brasileiro de Futebol!");
+        try{
+            System.out.println("Digite o ano que você deseja obter os dados entre 2003 e 2020: ");
+            long anoCampeonato = scan.nextLong();
+            scan.nextLine();
 
-//        // obter caminho do arquivo
-//        Path file = Path.of("campeonato-brasileiro.csv");
-//
-//        System.out.println("Bem vindo ao histórico dos jogos do Campeonato Brasileiro de Futebol!");
-////        System.out.println("Digite o ano que você deseja obter os dados: ");
+            CampeonatoBrasileiroImpl resultados =
+                    new CampeonatoBrasileiroImpl( (jogo) -> jogo.data().data().getYear() == anoCampeonato);
 
-        // obter a implementação: (ponto extra - abstrair para interface)
-        CampeonatoBrasileiroImpl resultados =
-                new CampeonatoBrasileiroImpl( (jogo) -> jogo.data().data().getYear() == 2018);
+            imprimirEstatisticas(resultados);
+            imprimirTabela(resultados.getTabela());
 
-        // imprimir estatisticas
-        imprimirEstatisticas(resultados);
+        }catch(Exception e){
+            System.err.println("Dado inválido! Inicie de novo o programa e digite um ano entre 2003 e 2020");
+        }
 
-        // imprimir tabela ordenada
-        imprimirTabela(resultados.getTabela());
 
     }
 
