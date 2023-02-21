@@ -143,12 +143,12 @@ public class CampeonatoBrasileiroImpl {
 
     public Long getTotalJogosComMenosDe3Gols() {
         return todosOsJogos().stream()
-                .filter(jogo -> jogo.mandantePlacar()+jogo.visitantePlacar() < Constantes.TOTAL_GOLS_IGUAL_A_TRES).count();
+                .filter(jogo -> jogo.mandantePlacar()+jogo.visitantePlacar() < 3).count();
     }
 
     public Long getTotalJogosCom3OuMaisGols() {
         return todosOsJogos().stream()
-                .filter(jogo -> jogo.mandantePlacar()+jogo.visitantePlacar() >= Constantes.TOTAL_GOLS_IGUAL_A_TRES).count();
+                .filter(jogo -> jogo.mandantePlacar()+jogo.visitantePlacar() >= 3).count();
     }
 
     public List<String> getTodosOsPlacares() {
@@ -223,7 +223,7 @@ public class CampeonatoBrasileiroImpl {
         return golsFeitosPorTime().entrySet().stream().min(Map.Entry.comparingByValue()).get();
     }
 
-    public List<PosicaoTabela> tabelaSemOrdenar(){
+    public List<PosicaoTabela> getTabela(){
         List<PosicaoTabela> tabelaTimes = new ArrayList<>();
         for (Map.Entry<Time,List<Jogo>> mapa : getTodosOsJogosPorTime().entrySet()){
             Time time = mapa.getKey();
@@ -241,11 +241,8 @@ public class CampeonatoBrasileiroImpl {
             tabelaTimes.add(posicaoTabela);
 
         }
-        return tabelaTimes;
+        return tabelaTimes.stream().sorted().toList();
 
-    }
-    public List<PosicaoTabela> getTabela() {
-        return tabelaSemOrdenar().stream().sorted().toList();
     }
 
 }
