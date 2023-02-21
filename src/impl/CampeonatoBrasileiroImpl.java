@@ -4,6 +4,7 @@ import dominio.*;
 
 
 import java.io.*;
+import java.nio.file.Path;
 import java.text.ParseException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -23,7 +24,7 @@ public class CampeonatoBrasileiroImpl {
     private List<Jogo> jogos;
     private Predicate<Jogo> filtro;
 
-    public CampeonatoBrasileiroImpl(Predicate<Jogo> filtro) throws IOException {
+    public CampeonatoBrasileiroImpl( Predicate<Jogo> filtro) throws IOException {
         this.jogos = lerArquivo();
         this.filtro = filtro;
         this.brasileirao = jogos.stream()
@@ -96,33 +97,25 @@ public class CampeonatoBrasileiroImpl {
         return estatisticasBrasileirao.summaryStatistics();
     }
 
-    public long retornarAnoCampeonato (){
-        var jogosPandemiaDoCampeonato2020 = brasileirao.stream()
+    public Boolean verificarCampeonatoComPandemia (){
+        List<Jogo> jogosPandemiaDoCampeonato2020 = brasileirao.stream()
                 .filter(jogo -> jogo.data().data().getYear() == 2020).toList();
-        if (!jogosPandemiaDoCampeonato2020.isEmpty()){
-            return 2020;
-        }else{
-            return Constantes.CAMPEONATO_SEM_PANDEMIA;
-        }
+        return !jogosPandemiaDoCampeonato2020.isEmpty();
     }
 
 
     public List<Jogo> jogosSemPandemiaEComPandemia(){
-        List<Jogo> jogosDeJaneiro = jogos.stream()
-                .filter(jogo -> jogo.data().data().getYear() == 2021 &&  jogo.data().data().getMonth() == Month.JANUARY)
-                .toList();
-        List<Jogo> jogosDeFevereiro = jogos.stream()
-                .filter(jogo -> jogo.data().data().getYear() == 2021 &&  jogo.data().data().getMonth() == Month.FEBRUARY)
-                .toList();
-        if (retornarAnoCampeonato() == 2020){
-            List<Jogo> jogosDoCampeonato = new ArrayList<>();
-            jogosDoCampeonato.addAll(brasileirao);
-            jogosDoCampeonato.addAll(jogosDeJaneiro);
-            jogosDoCampeonato.addAll(jogosDeFevereiro);
-            return jogosDoCampeonato;
-        }else{
-            return brasileirao;
+        if (verificarCampeonatoComPandemia()){
+            List<Jogo> jogosDeJaneiro2021 = jogos.stream()
+                    .filter(jogo -> jogo.data().data().getYear() == 2021 &&  jogo.data().data().getMonth() == Month.JANUARY)
+                    .toList();
+            List<Jogo> jogosDeFevereiro2021 = jogos.stream()
+                    .filter(jogo -> jogo.data().data().getYear() == 2021 &&  jogo.data().data().getMonth() == Month.FEBRUARY)
+                    .toList();
+            brasileirao.addAll(jogosDeJaneiro2021);
+            brasileirao.addAll(jogosDeFevereiro2021);
         }
+        return brasileirao;
     }
     public List<Jogo> todosOsJogos() {
         return jogosSemPandemiaEComPandemia();
@@ -141,12 +134,13 @@ public class CampeonatoBrasileiroImpl {
     }
 
     public Long getTotalJogosComMenosDe3Gols() {
-        return todosOsJogos().stream().filter(
-                jogo -> jogo.mandantePlacar()+jogo.visitantePlacar() < Constantes.TOTAL_GOLS_IGUAL_A_TRES).count();
+        return todosOsJogos().stream()
+                .filter(jogo -> jogo.mandantePlacar()+jogo.visitantePlacar() < Constantes.TOTAL_GOLS_IGUAL_A_TRES).count();
     }
 
     public Long getTotalJogosCom3OuMaisGols() {
-        return todosOsJogos().stream().filter(jogo -> jogo.mandantePlacar()+jogo.visitantePlacar() >= Constantes.TOTAL_GOLS_IGUAL_A_TRES).count();
+        return todosOsJogos().stream()
+                .filter(jogo -> jogo.mandantePlacar()+jogo.visitantePlacar() >= Constantes.TOTAL_GOLS_IGUAL_A_TRES).count();
     }
 
     public List<String> getTodosOsPlacares() {

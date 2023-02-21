@@ -8,7 +8,6 @@ import java.time.LocalDate;
 public class Constantes {
     public static final int TOTAL_GOLS_IGUAL_A_TRES = 3;
     public static final String EMPATE = "-";
-    public static final long CAMPEONATO_SEM_PANDEMIA = 0;
     public static final int RODADA = 0;
     public static final int DATA_JOGO = 1;
     public static final int HORARIO_JOGO = 2;
