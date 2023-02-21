@@ -103,19 +103,27 @@ public class CampeonatoBrasileiroImpl {
         return !jogosPandemiaDoCampeonato2020.isEmpty();
     }
 
+    public List<Jogo> jogosDoCampeonato2020(){
+        List<Jogo> jogosDoCampeonato2020 = new ArrayList<>();
+        List<Jogo> jogosDeJaneiro2021 = jogos.stream()
+                .filter(jogo -> jogo.data().data().getYear() == 2021 &&  jogo.data().data().getMonth() == Month.JANUARY)
+                .toList();
+        List<Jogo> jogosDeFevereiro2021 = jogos.stream()
+                .filter(jogo -> jogo.data().data().getYear() == 2021 &&  jogo.data().data().getMonth() == Month.FEBRUARY)
+                .toList();
+        jogosDoCampeonato2020.addAll(brasileirao);
+        jogosDoCampeonato2020.addAll(jogosDeJaneiro2021);
+        jogosDoCampeonato2020.addAll(jogosDeFevereiro2021);
+        return jogosDoCampeonato2020;
+    }
+
 
     public List<Jogo> jogosSemPandemiaEComPandemia(){
         if (verificarCampeonatoComPandemia()){
-            List<Jogo> jogosDeJaneiro2021 = jogos.stream()
-                    .filter(jogo -> jogo.data().data().getYear() == 2021 &&  jogo.data().data().getMonth() == Month.JANUARY)
-                    .toList();
-            List<Jogo> jogosDeFevereiro2021 = jogos.stream()
-                    .filter(jogo -> jogo.data().data().getYear() == 2021 &&  jogo.data().data().getMonth() == Month.FEBRUARY)
-                    .toList();
-            brasileirao.addAll(jogosDeJaneiro2021);
-            brasileirao.addAll(jogosDeFevereiro2021);
+            return jogosDoCampeonato2020();
+        }else{
+            return brasileirao;
         }
-        return brasileirao;
     }
     public List<Jogo> todosOsJogos() {
         return jogosSemPandemiaEComPandemia();
